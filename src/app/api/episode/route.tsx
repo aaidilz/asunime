@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 
 export async function GET(req: NextRequest) {
-    const animeUrl = req.nextUrl.searchParams.get('url');
+    const animeUrl = req.nextUrl.searchParams.get('query');
 
     if (!animeUrl) {
         return NextResponse.json({ error: 'Parameter url wajib diisi.' }, { status: 400 });
