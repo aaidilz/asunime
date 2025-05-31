@@ -13,25 +13,19 @@ export async function GET(req: NextRequest) {
         const url = `https://otakudesu.cloud/anime/${encodeURIComponent(animeUrl)}`;
         const response = await axios.get(url);
         const html = response.data.contents || response.data;
-
         const $ = cheerio.load(html);
 
         const img = $('.fotoanime img').attr('src') || '';
+        const episodes: any[] = [];
 
-        const sections = $('.episodelist').map((_, sectionEl) => {
-            const episodes = $(sectionEl).find('ul > li').map((_, liEl) => {
-                const title = $(liEl).find('a').text().trim();
-                const link = $(liEl).find('a').attr('href') || '';
-                const date = $(liEl).find('.zeebr').text().trim();
+        $('.episodelist ul li').each((_, liEl) => {
+            const title = $(liEl).find('a').text().trim();
+            const link = $(liEl).find('a').attr('href') || '';
+            const date = $(liEl).find('.zeebr').text().trim();
+            episodes.push({ title, link, date, img });
+        });
 
-                return { title, link, date, img }; // tambahkan img di sini
-            }).get();
-
-            return { episodes };
-        }).get();
-
-        return NextResponse.json({ sections }, { status: 200 });
-
+        return NextResponse.json({ episodes }, { status: 200 });
 
     } catch (error: any) {
         return NextResponse.json({
