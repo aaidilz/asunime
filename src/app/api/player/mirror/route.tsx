@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
       const links = ul.find('li > a').map((_, el) => {
         return {
           label: $(el).text().trim(),
-          url: $(el).attr('href') || '',
+          data_content: $(el).attr('data-content') || null,
         };
       }).get();
 
