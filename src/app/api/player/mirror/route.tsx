@@ -34,10 +34,11 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json({ mirrors });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({
       error: 'Gagal mengambil data mirror stream',
-      detail: error.message,
+      detail: message
     }, { status: 500 });
   }
 }

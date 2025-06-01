@@ -52,11 +52,12 @@ export async function GET(req: NextRequest) {
     );
 
     return NextResponse.json({ player: decodedIframe });
-  } catch (err: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
       {
         error: 'Gagal memproses video',
-        detail: err.message,
+        detail: message,
       },
       { status: 500 }
     );

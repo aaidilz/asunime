@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 import axios from 'axios';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AutorenewIcon from '@mui/icons-material/Autorenew';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import VideoPlayer from '@/app/components/VideoPlayer';
 
 interface Mirror {
@@ -32,8 +31,8 @@ export default function MirrorPage() {
       try {
         const res = await axios.get(`/api/player/mirror?query=${episodeSlug}`);
         setMirrors(res.data.mirrors || []);
-      } catch (err: any) {
-        console.error(err);
+      } catch (error: unknown) {
+        console.error(error);
         setError('Gagal memuat data mirror.');
       } finally {
         setLoading(false);
@@ -57,11 +56,6 @@ export default function MirrorPage() {
     } finally {
       setLoadingPlayer(false);
     }
-  };
-
-  const closePlayer = () => {
-    setActivePlayer(null);
-    setPlayerHtml('');
   };
 
   if (loading) return (

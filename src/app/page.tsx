@@ -4,6 +4,15 @@ import { useState } from 'react';
 import axios from 'axios';
 import AnimeCard from './components/AnimeCard';
 
+interface Anime {
+    title: string;
+    link: string;
+    thumbnail: string;
+    genres: string[];
+    status: string;
+    rating: string;
+}
+
 export default function Home() {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
@@ -86,7 +95,7 @@ export default function Home() {
 
             {results.length > 0 ? (
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-                    {results.map((anime: any, index: number) => (
+                    {results.map((anime: Anime, index: number) => (
                         <AnimeCard key={index} anime={anime} />
                     ))}
                 </div>

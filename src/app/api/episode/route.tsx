@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
+interface Episode {
+    title: string;
+    link: string;
+    date: string;
+    img: string;
+}
+
 export async function GET(req: NextRequest) {
     const animeUrl = req.nextUrl.searchParams.get('query');
 
@@ -16,7 +23,7 @@ export async function GET(req: NextRequest) {
         const $ = cheerio.load(html);
 
         const img = $('.fotoanime img').attr('src') || '';
-        const episodes: any[] = [];
+        const episodes: Episode[] = [];
 
         $('.episodelist ul li').each((_, liEl) => {
             const title = $(liEl).find('a').text().trim();
@@ -27,10 +34,11 @@ export async function GET(req: NextRequest) {
 
         return NextResponse.json({ episodes }, { status: 200 });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
         return NextResponse.json({
             error: 'Gagal mengambil data',
-            detail: error.message
+            detail: message
         }, { status: 500 });
     }
 }

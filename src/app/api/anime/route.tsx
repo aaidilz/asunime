@@ -38,10 +38,11 @@ export async function GET(req: NextRequest) {
         }).get();
 
         return NextResponse.json({ results });
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
         return NextResponse.json({
             error: 'Gagal mengambil data',
-            detail: error.message
+            detail: message
         }, { status: 500 });
     }
 }

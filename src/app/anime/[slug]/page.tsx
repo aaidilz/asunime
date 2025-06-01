@@ -12,7 +12,7 @@ const extractEpisodeSlug = (url: string): string | null => {
     const parsedUrl = new URL(url);
     const pathParts = parsedUrl.pathname.split('/').filter(part => part);
     return pathParts.length > 1 ? pathParts[pathParts.length - 1] : null;
-  } catch (e) {
+  } catch {
     return null;
   }
 };
@@ -42,9 +42,9 @@ export default function AnimePage() {
           ? response.data.episodes
           : [];
         setEpisodes(episodeList);
-      } catch (err: any) {
+      } catch (err) {
         setError('Gagal mengambil data episode');
-        console.error(err);
+        console.error('Error fetching episodes:', err);
       } finally {
         setLoading(false);
       }

@@ -1,9 +1,18 @@
 // src/app/components/AnimeCard.tsx
 import Link from 'next/link';
 
-export default function AnimeCard({ anime }: { anime: any }) {
+interface Anime {
+    link: string;
+    thumbnail?: string;
+    title: string;
+    status?: string;
+    rating?: string | number;
+    genres: string[];
+}
+
+export default function AnimeCard({ anime }: { anime: Anime }) {
     return (
-        <Link href={`/anime/${encodeURIComponent(anime.link.split('/').filter(Boolean).pop())}`}>
+        <Link href={`/anime/${encodeURIComponent(anime.link.split('/').filter(Boolean).pop() || '')}`}>
             <div className="group bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-700/50 hover:border-blue-500/30 flex flex-col h-full">
                 <div className="relative pb-[140%] overflow-hidden">
                     <img
