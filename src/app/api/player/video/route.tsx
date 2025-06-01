@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
+const COMMON_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml',
+  'Accept-Language': 'en-US,en;q=0.9',
+  'Content-Type': 'application/x-www-form-urlencoded',
+};
+
 export async function GET(req: NextRequest) {
   try {
     const data_content = req.nextUrl.searchParams.get('query');
@@ -16,7 +23,7 @@ export async function GET(req: NextRequest) {
     const nonceRes = await axios.post(
       'https://otakudesu.cloud/wp-admin/admin-ajax.php',
       new URLSearchParams({ action: 'aa1208d27f29ca340c92c66d1926f13f' }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+      { headers: COMMON_HEADERS }
     );
 
     const nonce = nonceRes.data?.data;
@@ -35,7 +42,7 @@ export async function GET(req: NextRequest) {
         nonce,
         action,
       }),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+      { headers: COMMON_HEADERS }
     );
 
     const base64Player = finalRes.data?.data;
