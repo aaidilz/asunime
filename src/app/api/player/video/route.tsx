@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import { CookieJar } from 'tough-cookie';
+import { wrapper } from 'axios-cookiejar-support';
 
 const COMMON_HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124 Safari/537.36',
   'Accept': 'text/html,application/xhtml+xml',
   'Accept-Language': 'en-US,en;q=0.9',
   'Content-Type': 'application/x-www-form-urlencoded',
+  'Referer': 'https://otakudesu.cloud/',
 };
+
+const jar = new CookieJar();
+const client = wrapper(axios.create({ jar }));
 
 export async function GET(req: NextRequest) {
   try {
@@ -20,7 +26,7 @@ export async function GET(req: NextRequest) {
     const { id, i, q } = decoded;
 
     // Request nonce dulu
-    const nonceRes = await axios.post(
+    const nonceRes = await client.post(
       'https://otakudesu.cloud/wp-admin/admin-ajax.php',
       new URLSearchParams({ action: 'aa1208d27f29ca340c92c66d1926f13f' }),
       { headers: COMMON_HEADERS }
@@ -33,7 +39,7 @@ export async function GET(req: NextRequest) {
 
     // Request data player dengan nonce dan param
     const action = '2a3505c93b0035d3f455df82bf976b84';
-    const finalRes = await axios.post(
+    const finalRes = await client.post(
       'https://otakudesu.cloud/wp-admin/admin-ajax.php',
       new URLSearchParams({
         id: id.toString(),

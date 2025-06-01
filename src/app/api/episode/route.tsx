@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import { CookieJar } from 'tough-cookie';
+import { wrapper } from 'axios-cookiejar-support';
 
 interface Episode {
     title: string;
@@ -17,12 +19,15 @@ export async function GET(req: NextRequest) {
     }
 
     try {
+        const jar = new CookieJar();
+        const client = wrapper(axios.create({ jar }));
         const url = `https://otakudesu.cloud/anime/${encodeURIComponent(animeUrl)}`;
-        const response = await axios.get(url, {
+        const response = await client.get(url, {
             headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml',
-            'Accept-Language': 'en-US,en;q=0.9',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/91.0.4472.124 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'referer': 'https://otakudesu.cloud/',
             },
         });
         const html = response.data.contents || response.data;
